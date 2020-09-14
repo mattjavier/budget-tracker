@@ -1,10 +1,8 @@
-const { get } = require("mongoose")
-
 let db
 const request = indexedDB.open('budget', 1)
 
 request.onupgradeneeded = event => {
-  db = event.target.result
+  const db = event.target.result
   db.createObjectStore('pending', { autoIncrement: true })
 }
 
@@ -36,6 +34,7 @@ const checkDatabase = () => {
       fetch('/api/transaction/bulk', {
         method: 'POST',
         headers: {
+          Accept: 'application/json, text/plain, */*',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(getAll.result)
@@ -43,7 +42,7 @@ const checkDatabase = () => {
         .then(() => {
           const transaction = db.transaction(['pending'], 'readwrite')
           const store = transaction.objectStore('pending')
-          store.close()
+          store.clear()
         })
     }
   }
