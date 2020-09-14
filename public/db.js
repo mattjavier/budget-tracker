@@ -39,6 +39,7 @@ const checkDatabase = () => {
         },
         body: JSON.stringify(getAll.result)
       })
+        .then(res => res.json())
         .then(() => {
           const transaction = db.transaction(['pending'], 'readwrite')
           const store = transaction.objectStore('pending')
