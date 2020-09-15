@@ -18,22 +18,22 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.url.includes('/api/')) {
-    // event.respondWith(
-    //   caches.open('data-cache-v1').then(cache => {
-    //     return fetch(event.request)
-    //       .then(res => {
-    //         if (res.status === 200) {
-    //           cache.put(event.request.url, res.clone())
-    //         }
+    event.respondWith(
+      caches.open('data-cache-v1').then(cache => {
+        return fetch(event.request)
+          .then(res => {
+            if (res.status === 200) {
+              cache.put(event.request.url, res.clone())
+            }
 
-    //         return res
-    //       })
-    //       .catch(err => {
-    //         return cache.match(event.request)
-    //       })
-    //   })
-    //   .catch(err => console.error(err))
-    // )
+            return res
+          })
+          .catch(err => {
+            return cache.match(event.request)
+          })
+      })
+      .catch(err => console.error(err))
+    )
     return
   }
 
